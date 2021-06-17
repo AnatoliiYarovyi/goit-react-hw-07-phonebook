@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import style from './App.module.css';
 import ContactForm from './components/ContactForm';
 import Filter from './components/Filter';
 import ContactList from './components/ContactList';
+import contactOperations from './redux/contact/contact-operations';
 
 class App extends Component {
-  state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
-    filter: '',
-  };
+  componentDidMount() {
+    this.props.fetchContacts();
+  }
 
   render() {
     return (
@@ -22,10 +18,18 @@ class App extends Component {
         <ContactForm />
         <h2 className={style.caption}>Contacts</h2>
         <Filter />
+        {this.props.isLoadingContacts && <h1>Loading...</h1>}
         <ContactList />
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  isLoadingContacts: state.contacts.loading,
+});
+const mapDispatchToProps = dispatch => ({
+  fetchContacts: () => dispatch(contactOperations.fetchContact()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
