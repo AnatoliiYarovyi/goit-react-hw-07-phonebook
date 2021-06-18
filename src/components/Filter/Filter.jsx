@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { chengeFilter } from '../../redux/contact/contact-action';
 import style from './Filter.module.css';
 import PropTypes from 'prop-types';
+import { getFilter } from '../../redux/contact/contact-selectors';
 
 const Filter = ({ filter, onHandleChenge }) => {
   return (
@@ -25,7 +26,7 @@ Filter.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  filter: state.contacts.filter,
+  filter: getFilter(state),
 });
 const mapDispatchToProps = dispatch => ({
   onHandleChenge: event => dispatch(chengeFilter(event.currentTarget.value)),
